@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=67", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pyblockrunner"
+version = "1.0.0"
+description = "Execute commented Python blocks, screenshot each output, and compile them into a PDF."
+readme = "README.md"
+requires-python = ">=3.8"
+license = { text = "MIT" }
+dependencies = [
+    "Pillow>=9.0",
+]
+
+[project.optional-dependencies]
+plots = ["matplotlib"]
+
+[project.scripts]
+pyblockrunner = "pyblockrunner.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["pyblockrunner*"]
+
+[tool.setuptools.package-data]
+pyblockrunner = ["fonts/*"]

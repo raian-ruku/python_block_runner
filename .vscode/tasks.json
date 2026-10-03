@@ -1,0 +1,46 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "PyBlockRunner: Run Current File",
+            "type": "shell",
+            "command": "pyblockrunner",
+            "args": ["${file}", "--open"],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared",
+                "clear": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "PyBlockRunner: Run Current File (CLI, no GUI)",
+            "type": "shell",
+            "command": "pyblockrunner",
+            "args": ["${file}", "--no-gui", "--open"],
+            "group": "build",
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared",
+                "clear": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "PyBlockRunner: Open GUI",
+            "type": "shell",
+            "command": "pyblockrunner",
+            "args": ["${file}", "--gui"],
+            "group": "build",
+            "presentation": {
+                "reveal": "silent",
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        }
+    ]
+}

@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 920" width="100%" height="100%">
+  <defs>
+    <filter id="cover-shadow" x="-5%" y="-5%" width="110%" height="115%">
+      <feDropShadow dx="0" dy="16" stdDeviation="20" flood-color="#000000" flood-opacity="0.22" />
+    </filter>
+  </defs>
+
+  <style>
+    .doc-font { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif; }
+    .doc-mono { font-family: "Iosevka NF", "SF Mono", Menlo, Consolas, monospace; }
+  </style>
+
+  <!-- Canvas Backdrop -->
+  <rect width="860" height="920" fill="#e2e8f0" rx="10" />
+
+  <!-- A4 Document Sheet (Full A4 Aspect Ratio 1240x1754 -> 600x850) -->
+  <g transform="translate(130, 35)" filter="url(#cover-shadow)">
+    <!-- Base Paper Canvas -->
+    <rect width="600" height="850" rx="4" fill="#fcfcfd" stroke="#cbd5e1" stroke-width="1" />
+
+    <!-- 1. Outer Architectural Double-Border -->
+    <rect x="27" y="27" width="546" height="796" fill="none" stroke="#4f8cc9" stroke-width="1.2" />
+    <rect x="33" y="33" width="534" height="784" fill="none" stroke="#e2e8f0" stroke-width="0.8" />
+
+    <!-- Precision Corner Bracket Crosshairs (L-Shapes) -->
+    <path d="M 20 38 L 20 20 L 38 20" fill="none" stroke="#4f8cc9" stroke-width="1.8" />
+    <path d="M 562 20 L 580 20 L 580 38" fill="none" stroke="#4f8cc9" stroke-width="1.8" />
+    <path d="M 20 812 L 20 830 L 38 830" fill="none" stroke="#4f8cc9" stroke-width="1.8" />
+    <path d="M 562 830 L 580 830 L 580 812" fill="none" stroke="#4f8cc9" stroke-width="1.8" />
+
+    <!-- 2. Top Header Symmetrical Geometric Decoration -->
+    <g transform="translate(0, 68)">
+      <polygon points="300,64 304,68 300,72 296,68" fill="#4f8cc9" />
+      <line x1="110" y1="68" x2="288" y2="68" stroke="#4f8cc9" stroke-width="0.8" />
+      <line x1="312" y1="68" x2="490" y2="68" stroke="#4f8cc9" stroke-width="0.8" />
+      <line x1="160" y1="71" x2="280" y2="71" stroke="#e2e8f0" stroke-width="0.6" />
+      <line x1="320" y1="71" x2="440" y2="71" stroke="#e2e8f0" stroke-width="0.6" />
+    </g>
+
+    <!-- 3. Bottom Footer Symmetrical Geometric Decoration -->
+    <g transform="translate(0, 782)">
+      <polygon points="300,778 304,782 300,786 296,782" fill="#4f8cc9" />
+      <line x1="110" y1="782" x2="288" y2="782" stroke="#4f8cc9" stroke-width="0.8" />
+      <line x1="312" y1="782" x2="490" y2="782" stroke="#4f8cc9" stroke-width="0.8" />
+      <line x1="160" y1="779" x2="280" y2="779" stroke="#e2e8f0" stroke-width="0.6" />
+      <line x1="320" y1="779" x2="440" y2="779" stroke="#e2e8f0" stroke-width="0.6" />
+    </g>
+
+    <!-- 4. Central Featured Credential Showcase Card (Name & ID) -->
+    <!-- Card Outer Soft Border Halo -->
+    <rect x="86" y="263" width="428" height="324" rx="10" fill="none" stroke="#e2e8f0" stroke-width="1.2" />
+    <!-- Card Body -->
+    <rect x="88" y="265" width="424" height="320" rx="9" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2" />
+    <!-- Card Inner Inset Frame -->
+    <rect x="96" y="273" width="408" height="304" rx="6" fill="none" stroke="#f1f5f9" stroke-width="0.8" />
+
+    <!-- Decorative Corner L-Notches Inside Card -->
+    <path d="M 101 283 L 101 278 L 106 278" fill="none" stroke="#4f8cc9" stroke-width="0.8" />
+    <path d="M 499 283 L 499 278 L 494 278" fill="none" stroke="#4f8cc9" stroke-width="0.8" />
+    <path d="M 101 567 L 101 572 L 106 572" fill="none" stroke="#4f8cc9" stroke-width="0.8" />
+    <path d="M 499 567 L 499 572 L 494 572" fill="none" stroke="#4f8cc9" stroke-width="0.8" />
+
+    <!-- 5. Geometric Crest / Seal at Top of Card -->
+    <polygon points="300,287 313,300 300,313 287,300" fill="none" stroke="#4f8cc9" stroke-width="1.2" />
+    <polygon points="300,293 307,300 300,307 293,300" fill="#4f8cc9" />
+    <line x1="148" y1="300" x2="278" y2="300" stroke="#cbd5e1" stroke-width="0.8" />
+    <line x1="322" y1="300" x2="452" y2="300" stroke="#cbd5e1" stroke-width="0.8" />
+    <circle cx="146" cy="300" r="1.5" fill="#4f8cc9" />
+    <circle cx="454" cy="300" r="1.5" fill="#4f8cc9" />
+
+    <!-- 6. Section 1: STUDENT NAME -->
+    <text x="300" y="333" class="doc-font" font-size="10.5" font-weight="700" fill="#4f8cc9" letter-spacing="0.2em" text-anchor="middle">S T U D E N T   N A M E</text>
+    <text x="300" y="364" class="doc-font" font-size="23" font-weight="800" fill="#0f172a" text-anchor="middle">Alex Chen</text>
+
+    <!-- 7. Center Symmetrical Ornamental Divider -->
+    <line x1="155" y1="405" x2="275" y2="405" stroke="#cbd5e1" stroke-width="0.8" />
+    <line x1="325" y1="405" x2="445" y2="405" stroke="#cbd5e1" stroke-width="0.8" />
+    <polygon points="300,401 304,405 300,409 296,405" fill="#4f8cc9" />
+    <circle cx="286" cy="405" r="1.2" fill="#4f8cc9" />
+    <circle cx="314" cy="405" r="1.2" fill="#4f8cc9" />
+
+    <!-- 8. Section 2: STUDENT ID -->
+    <text x="300" y="435" class="doc-font" font-size="10.5" font-weight="700" fill="#4f8cc9" letter-spacing="0.2em" text-anchor="middle">S T U D E N T   I D</text>
+    
+    <!-- Credential Pill Badge -->
+    <rect x="213" y="452" width="174" height="34" rx="7" fill="#f8fafc" stroke="#4f8cc9" stroke-width="1.2" />
+    <text x="300" y="475" class="doc-mono" font-size="16.5" font-weight="700" fill="#0f172a" letter-spacing="0.05em" text-anchor="middle">CS-2026-089</text>
+
+    <!-- 9. Bottom Card Decorative Line -->
+    <line x1="195" y1="528" x2="405" y2="528" stroke="#cbd5e1" stroke-width="0.8" />
+    <polygon points="300,526 302.5,528 300,530 297.5,528" fill="#4f8cc9" />
+    <circle cx="193" cy="528" r="1.2" fill="#4f8cc9" />
+    <circle cx="407" cy="528" r="1.2" fill="#4f8cc9" />
+  </g>
+</svg>

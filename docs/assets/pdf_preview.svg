@@ -1,0 +1,114 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 640" width="100%" height="100%">
+  <defs>
+    <filter id="pdf-shadow" x="-5%" y="-5%" width="110%" height="115%">
+      <feDropShadow dx="0" dy="16" stdDeviation="20" flood-color="#000000" flood-opacity="0.25" />
+    </filter>
+  </defs>
+
+  <style>
+    .doc-font { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif; }
+    .doc-mono { font-family: "Iosevka NF", "SF Mono", monospace; }
+  </style>
+
+  <!-- Canvas Backdrop -->
+  <rect width="860" height="640" fill="#e2e8f0" rx="10" />
+
+  <!-- A4 Document Sheet with Drop Shadow -->
+  <g transform="translate(130, 25)" filter="url(#pdf-shadow)">
+    <rect width="600" height="590" rx="6" fill="#ffffff" stroke="#cbd5e1" stroke-width="1" />
+
+    <!-- Document Margins and Content -->
+    <g transform="translate(45, 35)">
+      <!-- Top Title Header (Clean Word Style) -->
+      <text x="0" y="24" class="doc-font" font-size="20" font-weight="800" fill="#0f172a" letter-spacing="-0.02em">
+        Lab 04: Machine Learning Classification Pipeline
+      </text>
+      
+      <!-- Metadata Row -->
+      <g transform="translate(0, 36)">
+        <text x="0" y="14" class="doc-font" font-size="11" font-weight="600" fill="#64748b">STUDENT: <tspan fill="#0f172a">Alex Chen</tspan></text>
+        <text x="170" y="14" class="doc-font" font-size="11" font-weight="600" fill="#64748b">ID: <tspan fill="#0f172a">CS-2026-089</tspan></text>
+        <text x="320" y="14" class="doc-font" font-size="11" font-weight="600" fill="#64748b">SCRIPT: <tspan fill="#2563eb">analytics_pipeline.py</tspan></text>
+        <line x1="0" y1="26" x2="510" y2="26" stroke="#2563eb" stroke-width="2" />
+      </g>
+
+      <!-- Block 1 Section -->
+      <g transform="translate(0, 80)">
+        <text x="0" y="14" class="doc-font" font-size="14" font-weight="700" fill="#1e293b">
+          load libraries and dataset
+        </text>
+        <line x1="0" y1="20" x2="510" y2="20" stroke="#e2e8f0" stroke-width="1" />
+
+        <!-- Terminal Card 1 -->
+        <g transform="translate(0, 28)">
+          <rect width="510" height="85" rx="5" fill="#000000" />
+          <!-- Starship mini top line -->
+          <rect width="510" height="18" fill="#181a1f" rx="5" />
+          <path d="M 0 10 L 0 18 L 510 18 L 510 10 Z" fill="#181a1f" />
+          <text x="10" y="13" class="doc-mono" font-size="9" fill="#88c0d0"> alexchen ~/projects/analytics  v3.14.7 ❯ python3 analytics_pipeline.py</text>
+          
+          <text x="12" y="38" class="doc-mono" font-size="10" fill="#eceff4">Data Analytics &amp; Prediction Pipeline</text>
+          <text x="12" y="52" class="doc-mono" font-size="10" fill="#4c566a">------------------------------------</text>
+          
+          <!-- Bottom mini line -->
+          <text x="10" y="74" class="doc-mono" font-size="9" fill="#a3be8c"> alexchen ⏱ 14ms ❯</text>
+        </g>
+      </g>
+
+      <!-- Block 2 Section -->
+      <g transform="translate(0, 215)">
+        <text x="0" y="14" class="doc-font" font-size="14" font-weight="700" fill="#1e293b">
+          interactive parameter configuration &amp; summary
+        </text>
+        <line x1="0" y1="20" x2="510" y2="20" stroke="#e2e8f0" stroke-width="1" />
+
+        <!-- Terminal Card 2 -->
+        <g transform="translate(0, 28)">
+          <rect width="510" height="120" rx="5" fill="#000000" />
+          <rect width="510" height="18" fill="#181a1f" rx="5" />
+          <path d="M 0 10 L 0 18 L 510 18 L 510 10 Z" fill="#181a1f" />
+          <text x="10" y="13" class="doc-mono" font-size="9" fill="#88c0d0"> alexchen ~/projects/analytics  v3.14.7 ❯</text>
+
+          <text x="12" y="38" class="doc-mono" font-size="10" fill="#eceff4">Enter dataset path: data/customer_churn.csv</text>
+          <text x="12" y="54" class="doc-mono" font-size="10" fill="#eceff4">Enter cross-validation folds: 5</text>
+          <text x="12" y="70" class="doc-mono" font-size="10" fill="#eceff4">Select classification model: 2 (Gradient Boosting)</text>
+          <text x="12" y="86" class="doc-mono" font-size="10" fill="#eceff4">Accuracy: 94.62%  |  F1-Score: 0.938  |  ROC-AUC: 0.971</text>
+
+          <text x="10" y="108" class="doc-mono" font-size="9" fill="#a3be8c"> alexchen ⏱ 210ms ❯</text>
+        </g>
+      </g>
+
+      <!-- Block 3 Section: Plot / Analytics (Visual showcase) -->
+      <g transform="translate(0, 385)">
+        <text x="0" y="14" class="doc-font" font-size="14" font-weight="700" fill="#1e293b">
+          feature importance distribution (plot)
+        </text>
+        <line x1="0" y1="20" x2="510" y2="20" stroke="#e2e8f0" stroke-width="1" />
+
+        <!-- Inline Plot Box -->
+        <g transform="translate(0, 28)">
+          <rect width="510" height="85" rx="5" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1" />
+          
+          <!-- Mini SVG Bar Chart -->
+          <g transform="translate(40, 65) scale(1, -1)">
+            <rect x="20" y="0" width="40" height="48" fill="#3b82f6" rx="2" />
+            <rect x="90" y="0" width="40" height="32" fill="#6366f1" rx="2" />
+            <rect x="160" y="0" width="40" height="58" fill="#10b981" rx="2" />
+            <rect x="230" y="0" width="40" height="24" fill="#f59e0b" rx="2" />
+            <rect x="300" y="0" width="40" height="15" fill="#ec4899" rx="2" />
+            <line x1="0" y1="0" x2="380" y2="0" stroke="#94a3b8" stroke-width="1.5" />
+          </g>
+
+          <text x="255" y="76" class="doc-font" font-size="9.5" fill="#64748b" text-anchor="middle">
+            Figure 1: Automated Matplotlib inline figure capture
+          </text>
+        </g>
+      </g>
+
+      <!-- Footer Page Number -->
+      <text x="255" y="525" class="doc-font" font-size="11" font-weight="500" fill="#94a3b8" text-anchor="middle">
+        1
+      </text>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,165 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 380" width="100%" height="100%">
+  <defs>
+    <!-- Background Gradient -->
+    <linearGradient id="bg-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a0c10" />
+      <stop offset="40%" stop-color="#0f172a" />
+      <stop offset="80%" stop-color="#1e1b4b" />
+      <stop offset="100%" stop-color="#090d16" />
+    </linearGradient>
+
+    <!-- Accent Gradients -->
+    <linearGradient id="accent-cyan-blue" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#38bdf8" />
+      <stop offset="50%" stop-color="#818cf8" />
+      <stop offset="100%" stop-color="#c084fc" />
+    </linearGradient>
+
+    <linearGradient id="btn-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3b82f6" />
+      <stop offset="100%" stop-color="#1d4ed8" />
+    </linearGradient>
+
+    <!-- Card Shadow -->
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="35" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="115%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#000" flood-opacity="0.5" />
+    </filter>
+  </defs>
+
+  <style>
+    .title { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif; font-weight: 800; font-size: 52px; fill: #ffffff; letter-spacing: -0.03em; }
+    .subtitle { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif; font-weight: 400; font-size: 20px; fill: #94a3b8; }
+    .badge-text { font-family: "SF Mono", "Iosevka NF", "Fira Code", monospace; font-size: 13px; font-weight: 600; fill: #cbd5e1; }
+    .code-pill { font-family: "SF Mono", "Iosevka NF", "Fira Code", monospace; font-size: 14px; fill: #38bdf8; }
+  </style>
+
+  <!-- Background Base -->
+  <rect width="1200" height="380" rx="16" fill="url(#bg-grad)" />
+
+  <!-- Ambient Glow Circles -->
+  <circle cx="200" cy="100" r="180" fill="#38bdf8" opacity="0.12" filter="url(#glow)" />
+  <circle cx="980" cy="220" r="220" fill="#818cf8" opacity="0.15" filter="url(#glow)" />
+  <circle cx="600" cy="360" r="140" fill="#c084fc" opacity="0.08" filter="url(#glow)" />
+
+  <!-- Subtle Grid Lines -->
+  <g opacity="0.06" stroke="#ffffff" stroke-width="1">
+    <line x1="0" y1="60" x2="1200" y2="60" />
+    <line x1="0" y1="140" x2="1200" y2="140" />
+    <line x1="0" y1="220" x2="1200" y2="220" />
+    <line x1="0" y1="300" x2="1200" y2="300" />
+    <line x1="200" y1="0" x2="200" y2="380" />
+    <line x1="400" y1="0" x2="400" y2="380" />
+    <line x1="600" y1="0" x2="600" y2="380" />
+    <line x1="800" y1="0" x2="800" y2="380" />
+    <line x1="1000" y1="0" x2="1000" y2="380" />
+  </g>
+
+  <!-- Header Content -->
+  <g transform="translate(80, 75)">
+    <!-- Tag Icon & Version Badge -->
+    <rect x="0" y="0" width="130" height="28" rx="14" fill="#1e293b" stroke="#334155" stroke-width="1" />
+    <circle cx="14" cy="14" r="5" fill="#10b981" />
+    <text x="28" y="19" class="badge-text" fill="#38bdf8">v1.0.0 STABLE</text>
+
+    <rect x="142" y="0" width="150" height="28" rx="14" fill="#1e293b" stroke="#334155" stroke-width="1" />
+    <text x="156" y="19" class="badge-text" fill="#a78bfa">⚡ STARSHIP READY</text>
+
+    <!-- Main Title -->
+    <text x="0" y="80" class="title">
+      Py<tspan fill="url(#accent-cyan-blue)">Block</tspan>Runner
+    </text>
+
+    <!-- Subtitle -->
+    <text x="0" y="122" class="subtitle">
+      Automate commented Python block execution, render authentic Starship
+    </text>
+    <text x="0" y="152" class="subtitle">
+      terminal screenshots, and compile clean Word-doc style PDF reports.
+    </text>
+
+    <!-- Terminal Command Pill -->
+    <g transform="translate(0, 185)">
+      <rect width="430" height="46" rx="10" fill="#090d16" stroke="#1e293b" stroke-width="1.5" />
+      <text x="16" y="28" class="code-pill">
+        <tspan fill="#64748b">$ </tspan>
+        <tspan fill="#f1f5f9">pip install </tspan>
+        <tspan fill="#38bdf8">-e </tspan>
+        <tspan fill="#94a3b8">/path/to/python_block</tspan>
+      </text>
+      <!-- Copy / Run Indicator -->
+      <rect x="360" y="8" width="58" height="30" rx="6" fill="#1e293b" />
+      <text x="375" y="27" font-family="-apple-system, sans-serif" font-size="12" font-weight="600" fill="#94a3b8">RUN</text>
+    </g>
+  </g>
+
+  <!-- Right Hero Card: Mini Terminal / Card Stack Graphic -->
+  <g transform="translate(730, 55)" filter="url(#shadow)">
+    <!-- Backing Card (Offset) -->
+    <rect x="35" y="35" width="380" height="235" rx="12" fill="#111827" stroke="#1f2937" stroke-width="1.5" opacity="0.6" />
+    
+    <!-- Main Card -->
+    <rect x="0" y="0" width="390" height="245" rx="12" fill="#030712" stroke="#334155" stroke-width="1.5" />
+    
+    <!-- Window Bar -->
+    <rect x="0" y="0" width="390" height="36" rx="12" fill="#0f172a" />
+    <path d="M 0 24 L 0 36 L 390 36 L 390 24 Z" fill="#0f172a" />
+    <circle cx="18" cy="18" r="5.5" fill="#ef4444" />
+    <circle cx="34" cy="18" r="5.5" fill="#f59e0b" />
+    <circle cx="50" cy="18" r="5.5" fill="#10b981" />
+    <text x="195" y="23" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="11.5" font-weight="600" fill="#94a3b8" text-anchor="middle">analytics_pipeline.py — PyBlockRunner</text>
+
+    <!-- Starship Top Prompt (Dynamic Universal Starship Format) -->
+    <g transform="translate(14, 54)">
+      <text x="0" y="12" font-family="'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace" font-size="10.5">
+        <tspan fill="#38bdf8" font-weight="bold">~/analytics</tspan>
+        <tspan fill="#64748b"> on </tspan>
+        <tspan fill="#c084fc" font-weight="bold">main</tspan>
+        <tspan fill="#64748b"> via </tspan>
+        <tspan fill="#fbbf24" font-weight="bold">3.11</tspan>
+        <tspan fill="#34d399" font-weight="bold"> ❯ </tspan>
+        <tspan fill="#f1f5f9">python3 pipeline.py</tspan>
+      </text>
+    </g>
+
+    <!-- Divider Line -->
+    <line x1="14" y1="74" x2="376" y2="74" stroke="#1e293b" stroke-width="1" />
+
+    <!-- Terminal Execution Stream -->
+    <g transform="translate(14, 86)">
+      <text x="0" y="12" font-family="'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace" font-size="10" font-weight="bold" fill="#f8fafc">Data Analytics &amp; Prediction Pipeline</text>
+      <text x="0" y="28" font-family="'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace" font-size="9.5">
+        <tspan fill="#64748b">Dataset: </tspan><tspan fill="#f1f5f9">customer_churn.csv</tspan> <tspan fill="#475569">(14,250 rows)</tspan>
+      </text>
+      <text x="0" y="44" font-family="'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace" font-size="9.5">
+        <tspan fill="#64748b">Model: </tspan><tspan fill="#f1f5f9">Gradient Boosting (5-Fold CV)</tspan>
+      </text>
+      <text x="0" y="60" font-family="'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace" font-size="9.5">
+        <tspan fill="#64748b">Accuracy: </tspan><tspan fill="#34d399" font-weight="bold">94.62%</tspan>  <tspan fill="#64748b">ROC-AUC: </tspan><tspan fill="#34d399" font-weight="bold">0.971</tspan>
+      </text>
+      <text x="0" y="76" font-family="'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace" font-size="9.5" fill="#34d399">
+        ✓ 5 folds evaluated | Model exported
+      </text>
+    </g>
+
+    <!-- Divider Line -->
+    <line x1="14" y1="178" x2="376" y2="178" stroke="#1e293b" stroke-width="1" />
+
+    <!-- Starship Bottom Prompt with Command Duration -->
+    <g transform="translate(14, 194)">
+      <text x="0" y="12" font-family="'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace" font-size="10.5">
+        <tspan fill="#38bdf8" font-weight="bold">~/analytics</tspan>
+        <tspan fill="#64748b"> on </tspan>
+        <tspan fill="#c084fc" font-weight="bold">main</tspan>
+        <tspan fill="#fbbf24"> [⏱ 1.24s]</tspan>
+        <tspan fill="#34d399" font-weight="bold"> ❯ </tspan>
+      </text>
+      <!-- Blinking Terminal Cursor Block -->
+      <rect x="200" y="1" width="7" height="14" fill="#38bdf8" rx="1" />
+    </g>
+  </g>
+</svg>

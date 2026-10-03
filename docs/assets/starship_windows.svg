@@ -1,0 +1,198 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1060 560" width="100%" height="100%">
+  <defs>
+    <filter id="win-shadow" x="-5%" y="-5%" width="110%" height="115%">
+      <feDropShadow dx="0" dy="18" stdDeviation="22" flood-color="#000000" flood-opacity="0.65" />
+    </filter>
+  </defs>
+
+  <style>
+    .mono { font-family: "Iosevka NF", "Iosevka", "JetBrains Mono", "SF Mono", monospace; }
+    .term-text { font-size: 14px; fill: #eceff4; line-height: 1.5; }
+    .term-green { font-size: 14px; fill: #a3be8c; }
+    .term-yellow { font-size: 14px; fill: #ebcb8b; }
+    .term-cyan { font-size: 14px; fill: #88c0d0; }
+    .term-dim { font-size: 14px; fill: #4c566a; }
+  </style>
+
+  <!-- Container with Shadow -->
+  <g transform="translate(30, 20)" filter="url(#win-shadow)">
+    <!-- Terminal Background -->
+    <rect width="1000" height="515" rx="8" fill="#0c0c0c" stroke="#333333" stroke-width="1.5" />
+
+    <!-- Windows 11 Terminal Tab Bar -->
+    <rect width="1000" height="36" rx="8" fill="#1f1f1f" />
+    <path d="M 0 26 L 0 36 L 1000 36 L 1000 26 Z" fill="#1f1f1f" />
+    <line x1="0" y1="36" x2="1000" y2="36" stroke="#2d2d2d" stroke-width="1" />
+    
+    <!-- Active Tab: PowerShell -->
+    <g transform="translate(8, 6)">
+      <rect width="190" height="30" rx="6" fill="#0c0c0c" stroke="#2d2d2d" stroke-width="1" />
+      <path d="M 0 20 L 0 30 L 190 30 L 190 20 Z" fill="#0c0c0c" />
+      <!-- Windows PowerShell Icon (Arrow Prompt) -->
+      <polygon points="14,8 20,15 14,22" fill="#57c7ff" />
+      <text x="26" y="19" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" fill="#f3f3f3">PowerShell</text>
+      <!-- Tab Close Button (x) -->
+      <g transform="translate(168, 10)">
+        <line x1="0" y1="0" x2="8" y2="8" stroke="#888888" stroke-width="1.2" />
+        <line x1="8" y1="0" x2="0" y2="8" stroke="#888888" stroke-width="1.2" />
+      </g>
+    </g>
+
+    <!-- New Tab (+) Button -->
+    <g transform="translate(206, 14)">
+      <line x1="6" y1="2" x2="6" y2="12" stroke="#aaaaaa" stroke-width="1.3" />
+      <line x1="1" y1="7" x2="11" y2="7" stroke="#aaaaaa" stroke-width="1.3" />
+    </g>
+
+    <!-- Titlebar Center Label -->
+    <text x="540" y="22" class="mono" font-size="11.5" fill="#666666" text-anchor="middle">alexchen — analytics_pipeline.py — Windows Terminal</text>
+
+    <!-- Windows 11 Window Controls (Top-Right) -->
+    <g transform="translate(885, 0)">
+      <!-- Minimize Button -->
+      <rect x="0" y="0" width="38" height="36" fill="transparent" />
+      <line x1="14" y1="19" x2="24" y2="19" stroke="#cccccc" stroke-width="1.2" />
+      
+      <!-- Maximize Button -->
+      <rect x="38" y="0" width="38" height="36" fill="transparent" />
+      <rect x="52" y="13" width="10" height="10" fill="none" stroke="#cccccc" stroke-width="1.2" />
+      
+      <!-- Close Button -->
+      <rect x="76" y="0" width="38" height="36" rx="0" fill="transparent" />
+      <line x1="90" y1="13" x2="100" y2="23" stroke="#cccccc" stroke-width="1.2" />
+      <line x1="100" y1="13" x2="90" y2="23" stroke="#cccccc" stroke-width="1.2" />
+    </g>
+
+    <!-- Top Starship Prompt Line (Windows Style) -->
+    <g transform="translate(18, 52)">
+      <!-- Segment 0: Windows Logo + Username (glass0 #3b414a) -->
+      <path d="M 12 0 C 5.37 0 0 5.37 0 12 C 0 18.63 5.37 24 12 24 L 12 0 Z" fill="#3b414a" />
+      <path d="M 12 0 L 104 0 L 116 12 L 104 24 L 12 24 Z" fill="#3b414a" />
+      <!-- Windows 11 Vector Logo -->
+      <g transform="translate(13, 5.5)">
+        <rect x="0" y="0" width="5.5" height="5.5" rx="0.5" fill="#c8ced8" />
+        <rect x="7" y="0" width="5.5" height="5.5" rx="0.5" fill="#c8ced8" />
+        <rect x="0" y="7" width="5.5" height="5.5" rx="0.5" fill="#c8ced8" />
+        <rect x="7" y="7" width="5.5" height="5.5" rx="0.5" fill="#c8ced8" />
+      </g>
+      <text x="34" y="16.5" class="mono" font-size="12.5" font-weight="600" fill="#c8ced8">alexchen</text>
+
+      <!-- Segment 1: Windows Path (glass1 #424852) -->
+      <path d="M 104 0 L 418 0 L 430 12 L 418 24 L 104 24 L 116 12 Z" fill="#424852" />
+      <text x="122" y="16.5" class="mono" font-size="12.5" fill="#c8ced8">C:\Users\alexchen\projects\data-analytics</text>
+
+      <!-- Segment 2: Git Branch (glass2 #4a505a) -->
+      <path d="M 418 0 L 486 0 L 498 12 L 486 24 L 418 24 L 430 12 Z" fill="#4a505a" />
+      <g transform="translate(434, 4.5)">
+        <circle cx="3" cy="3" r="2" fill="none" stroke="#c8ced8" stroke-width="1.3" />
+        <circle cx="3" cy="12" r="2" fill="none" stroke="#c8ced8" stroke-width="1.3" />
+        <circle cx="11" cy="4" r="2" fill="none" stroke="#c8ced8" stroke-width="1.3" />
+        <line x1="3" y1="5" x2="3" y2="10" stroke="#c8ced8" stroke-width="1.3" />
+        <path d="M 3 8 C 5 8 9 7 11 6" fill="none" stroke="#c8ced8" stroke-width="1.3" />
+      </g>
+      <text x="452" y="16.5" class="mono" font-size="12.5" fill="#c8ced8">main</text>
+
+      <!-- Segment 3: Python (glass3 #515862) -->
+      <path d="M 486 0 L 568 0 L 580 12 L 568 24 L 486 24 L 498 12 Z" fill="#515862" />
+      <g transform="translate(503, 4.5)">
+        <path d="M 7 1 C 4.5 1 3 2 3 3.5 L 3 5 L 8 5 L 8 6 L 1.5 6 C 0.5 6 0 7.5 0 9 C 0 10.5 1 11.5 2.5 11.5 L 4 11.5 L 4 10 C 4 8.5 5.5 7.5 7 7.5 L 10.5 7.5 C 11.5 7.5 12 6.5 12 5.5 C 12 4 11 1 7 1 Z M 5 2.5 A 0.8 0.8 0 1 1 5 4.1 A 0.8 0.8 0 0 1 5 2.5 Z" fill="#ebcb8b" />
+        <path d="M 7 14 C 9.5 14 11 13 11 11.5 L 11 10 L 6 10 L 6 9 L 12.5 9 C 13.5 9 14 7.5 14 6 C 14 4.5 13 3.5 11.5 3.5 L 10 3.5 L 10 5 C 10 6.5 8.5 7.5 7 7.5 L 3.5 7.5 C 2.5 7.5 2 8.5 2 9.5 C 2 11 3 14 7 14 Z M 9 12.5 A 0.8 0.8 0 1 1 9 10.9 A 0.8 0.8 0 0 1 9 12.5 Z" fill="#88c0d0" />
+      </g>
+      <text x="523" y="16.5" class="mono" font-size="12.5" fill="#c8ced8">3.11.4</text>
+
+      <!-- Segment 4: Time (glass5 #626a75) with Right Cap -->
+      <path d="M 568 0 L 662 0 C 668.63 0 674 5.37 674 12 C 674 18.63 668.63 24 662 24 L 568 24 L 580 12 Z" fill="#626a75" />
+      <g transform="translate(586, 5)">
+        <circle cx="7" cy="7" r="6" fill="none" stroke="#c8ced8" stroke-width="1.3" />
+        <polyline points="7,3.5 7,7 9.5,8.2" fill="none" stroke="#c8ced8" stroke-width="1.3" stroke-linecap="round" />
+      </g>
+      <text x="606" y="16.5" class="mono" font-size="12.5" fill="#c8ced8">09:42 PM</text>
+
+      <!-- Trailing Prompt (Windows uses python instead of python3) -->
+      <text x="686" y="16.5" class="mono" font-size="14" font-weight="bold" fill="#c8ced8">❯</text>
+      <text x="704" y="16.5" class="mono" font-size="13.5" fill="#eceff4">python analytics_pipeline.py</text>
+    </g>
+
+    <!-- Terminal Content Stream -->
+    <g transform="translate(18, 100)">
+      <text x="0" y="18" class="mono term-text" font-weight="bold">Data Analytics &amp; Prediction Pipeline</text>
+      <text x="0" y="34" class="mono term-dim">------------------------------------</text>
+
+      <text x="0" y="62" class="mono term-text"><tspan fill="#88c0d0">Enter dataset path: </tspan><tspan fill="#a3be8c" font-weight="bold">data\customer_churn.csv</tspan></text>
+      <text x="0" y="82" class="mono term-text"><tspan fill="#88c0d0">Enter cross-validation folds: </tspan><tspan fill="#a3be8c" font-weight="bold">5</tspan></text>
+      <text x="0" y="102" class="mono term-text"><tspan fill="#88c0d0">Select classification model: </tspan><tspan fill="#a3be8c" font-weight="bold">2 (Gradient Boosting)</tspan></text>
+
+      <text x="0" y="140" class="mono term-text" font-weight="bold">Dataset &amp; Training Summary</text>
+      <text x="0" y="156" class="mono term-dim">--------------------------</text>
+      <text x="0" y="176" class="mono term-text">Total Records: 14,250 | Features: 18 numeric, 4 categorical</text>
+      <text x="0" y="194" class="mono term-text">Preprocessing: Missing values imputed (34), One-Hot encoded</text>
+      <text x="0" y="212" class="mono term-text">Train Split: 11,400 (80%) | Test Split: 2,850 (20%)</text>
+      <text x="0" y="230" class="mono term-text">Accuracy: <tspan fill="#a3be8c" font-weight="bold">94.62%</tspan>  |  Precision: 0.931  |  Recall: 0.945</text>
+      <text x="0" y="248" class="mono term-text">F1-Score: <tspan fill="#ebcb8b" font-weight="bold">0.938</tspan>   |  ROC-AUC: <tspan fill="#a3be8c" font-weight="bold">0.971</tspan></text>
+      <text x="0" y="266" class="mono term-text">Optimization: Converged in 42 iterations (early stopping)</text>
+      <text x="0" y="284" class="mono term-text">Top Predictors: tenure, total_charges, contract_type</text>
+
+      <text x="0" y="324" class="mono term-green">✓ All 5 folds evaluated  |  Model weights exported to models\gb_classifier.pkl</text>
+    </g>
+
+    <!-- Bottom Starship Prompt Line with Execution Duration -->
+    <g transform="translate(18, 468)">
+      <!-- Segment 0: Windows Logo + Username -->
+      <path d="M 12 0 C 5.37 0 0 5.37 0 12 C 0 18.63 5.37 24 12 24 L 12 0 Z" fill="#3b414a" />
+      <path d="M 12 0 L 104 0 L 116 12 L 104 24 L 12 24 Z" fill="#3b414a" />
+      <g transform="translate(13, 5.5)">
+        <rect x="0" y="0" width="5.5" height="5.5" rx="0.5" fill="#c8ced8" />
+        <rect x="7" y="0" width="5.5" height="5.5" rx="0.5" fill="#c8ced8" />
+        <rect x="0" y="7" width="5.5" height="5.5" rx="0.5" fill="#c8ced8" />
+        <rect x="7" y="7" width="5.5" height="5.5" rx="0.5" fill="#c8ced8" />
+      </g>
+      <text x="34" y="16.5" class="mono" font-size="12.5" font-weight="600" fill="#c8ced8">alexchen</text>
+
+      <!-- Segment 1: Directory -->
+      <path d="M 104 0 L 418 0 L 430 12 L 418 24 L 104 24 L 116 12 Z" fill="#424852" />
+      <text x="122" y="16.5" class="mono" font-size="12.5" fill="#c8ced8">C:\Users\alexchen\projects\data-analytics</text>
+
+      <!-- Segment 2: Git Branch -->
+      <path d="M 418 0 L 486 0 L 498 12 L 486 24 L 418 24 L 430 12 Z" fill="#4a505a" />
+      <g transform="translate(434, 4.5)">
+        <circle cx="3" cy="3" r="2" fill="none" stroke="#c8ced8" stroke-width="1.3" />
+        <circle cx="3" cy="12" r="2" fill="none" stroke="#c8ced8" stroke-width="1.3" />
+        <circle cx="11" cy="4" r="2" fill="none" stroke="#c8ced8" stroke-width="1.3" />
+        <line x1="3" y1="5" x2="3" y2="10" stroke="#c8ced8" stroke-width="1.3" />
+        <path d="M 3 8 C 5 8 9 7 11 6" fill="none" stroke="#c8ced8" stroke-width="1.3" />
+      </g>
+      <text x="452" y="16.5" class="mono" font-size="12.5" fill="#c8ced8">main</text>
+
+      <!-- Segment 3: Python -->
+      <path d="M 486 0 L 568 0 L 580 12 L 568 24 L 486 24 L 498 12 Z" fill="#515862" />
+      <g transform="translate(503, 4.5)">
+        <path d="M 7 1 C 4.5 1 3 2 3 3.5 L 3 5 L 8 5 L 8 6 L 1.5 6 C 0.5 6 0 7.5 0 9 C 0 10.5 1 11.5 2.5 11.5 L 4 11.5 L 4 10 C 4 8.5 5.5 7.5 7 7.5 L 10.5 7.5 C 11.5 7.5 12 6.5 12 5.5 C 12 4 11 1 7 1 Z M 5 2.5 A 0.8 0.8 0 1 1 5 4.1 A 0.8 0.8 0 0 1 5 2.5 Z" fill="#ebcb8b" />
+        <path d="M 7 14 C 9.5 14 11 13 11 11.5 L 11 10 L 6 10 L 6 9 L 12.5 9 C 13.5 9 14 7.5 14 6 C 14 4.5 13 3.5 11.5 3.5 L 10 3.5 L 10 5 C 10 6.5 8.5 7.5 7 7.5 L 3.5 7.5 C 2.5 7.5 2 8.5 2 9.5 C 2 11 3 14 7 14 Z M 9 12.5 A 0.8 0.8 0 1 1 9 10.9 A 0.8 0.8 0 0 1 9 12.5 Z" fill="#88c0d0" />
+      </g>
+      <text x="523" y="16.5" class="mono" font-size="12.5" fill="#c8ced8">3.11.4</text>
+
+      <!-- Segment 4: Time with Right Cap -->
+      <path d="M 568 0 L 662 0 C 668.63 0 674 5.37 674 12 C 674 18.63 668.63 24 662 24 L 568 24 L 580 12 Z" fill="#626a75" />
+      <g transform="translate(586, 5)">
+        <circle cx="7" cy="7" r="6" fill="none" stroke="#c8ced8" stroke-width="1.3" />
+        <polyline points="7,3.5 7,7 9.5,8.2" fill="none" stroke="#c8ced8" stroke-width="1.3" stroke-linecap="round" />
+      </g>
+      <text x="606" y="16.5" class="mono" font-size="12.5" fill="#c8ced8">09:42 PM</text>
+
+      <!-- Execution Duration badge (starship cmd_duration) -->
+      <g transform="translate(686, 4.5)">
+        <circle cx="7" cy="7.5" r="5.5" fill="none" stroke="#9da5b1" stroke-width="1.3" />
+        <polyline points="7,4.5 7,7.5 9,7.5" fill="none" stroke="#9da5b1" stroke-width="1.3" stroke-linecap="round" />
+        <line x1="5.5" y1="0.8" x2="8.5" y2="0.8" stroke="#9da5b1" stroke-width="1.3" stroke-linecap="round" />
+        <line x1="7" y1="0.8" x2="7" y2="2" stroke="#9da5b1" stroke-width="1.3" />
+      </g>
+      <text x="705" y="16.5" class="mono" font-size="12.5" fill="#9da5b1">1s240ms</text>
+
+      <!-- Prompt Arrow -->
+      <text x="772" y="16.5" class="mono" font-size="14" font-weight="bold" fill="#c8ced8">❯</text>
+
+      <!-- Terminal Cursor Block -->
+      <rect x="788" y="3.5" width="9" height="17" fill="#c8ced8" opacity="0.9" />
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,143 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 760" width="100%" height="100%">
+  <defs>
+    <filter id="code-pdf-shadow" x="-5%" y="-5%" width="110%" height="115%">
+      <feDropShadow dx="0" dy="16" stdDeviation="20" flood-color="#000000" flood-opacity="0.25" />
+    </filter>
+  </defs>
+
+  <style>
+    .doc-font { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif; }
+    .doc-mono { font-family: "Iosevka NF", "SF Mono", monospace; }
+  </style>
+
+  <!-- Canvas Backdrop -->
+  <rect width="860" height="760" fill="#e2e8f0" rx="10" />
+
+  <!-- A4 Document Sheet with Drop Shadow -->
+  <g transform="translate(130, 20)" filter="url(#code-pdf-shadow)">
+    <rect width="600" height="715" rx="6" fill="#ffffff" stroke="#cbd5e1" stroke-width="1" />
+
+    <!-- Document Margins and Content -->
+    <g transform="translate(45, 28)">
+      <!-- Top Title Header -->
+      <text x="0" y="20" class="doc-font" font-size="18" font-weight="800" fill="#0f172a" letter-spacing="-0.02em">
+        Lab 04: Machine Learning Classification Pipeline
+      </text>
+      
+      <!-- Metadata Row -->
+      <g transform="translate(0, 32)">
+        <text x="0" y="14" class="doc-font" font-size="10.5" font-weight="600" fill="#64748b">STUDENT: <tspan fill="#0f172a">Alex Chen</tspan></text>
+        <text x="160" y="14" class="doc-font" font-size="10.5" font-weight="600" fill="#64748b">ID: <tspan fill="#0f172a">CS-2026-089</tspan></text>
+        <text x="310" y="14" class="doc-font" font-size="10.5" font-weight="600" fill="#64748b">SCRIPT: <tspan fill="#2563eb">analytics_pipeline.py</tspan></text>
+        <line x1="0" y1="24" x2="510" y2="24" stroke="#2563eb" stroke-width="2" />
+      </g>
+
+      <!-- Block 1 Section: Code + Output -->
+      <g transform="translate(0, 72)">
+        <text x="0" y="14" class="doc-font" font-size="13" font-weight="700" fill="#1e293b">
+          load libraries and dataset
+        </text>
+        <line x1="0" y1="20" x2="510" y2="20" stroke="#e2e8f0" stroke-width="1" />
+
+        <!-- 1. Code Snippet Box (Include Code enabled) -->
+        <g transform="translate(0, 26)">
+          <rect width="510" height="48" rx="4" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1" />
+          <path d="M 0 0 L 28 0 L 28 48 L 0 48 Z" fill="#f1f5f9" />
+          <line x1="28" y1="0" x2="28" y2="48" stroke="#e2e8f0" stroke-width="1" />
+          
+          <!-- Line Numbers -->
+          <text x="14" y="17" class="doc-mono" font-size="9" fill="#94a3b8" text-anchor="middle">1</text>
+          <text x="14" y="32" class="doc-mono" font-size="9" fill="#94a3b8" text-anchor="middle">2</text>
+          
+          <!-- Code Lines -->
+          <text x="36" y="17" class="doc-mono" font-size="9.5" fill="#0f172a"><tspan fill="#8b5cf6">import</tspan> pandas <tspan fill="#8b5cf6">as</tspan> pd, numpy <tspan fill="#8b5cf6">as</tspan> np</text>
+          <text x="36" y="32" class="doc-mono" font-size="9.5" fill="#0f172a">df = pd.read_csv(<tspan fill="#10b981">"data/customer_churn.csv"</tspan>)</text>
+        </g>
+
+        <!-- 2. Terminal Screenshot Card 1 -->
+        <g transform="translate(0, 80)">
+          <rect width="510" height="72" rx="4" fill="#000000" />
+          <rect width="510" height="16" fill="#181a1f" rx="4" />
+          <path d="M 0 8 L 0 16 L 510 16 L 510 8 Z" fill="#181a1f" />
+          <text x="10" y="12" class="doc-mono" font-size="8.5" fill="#88c0d0"> alexchen ~/projects/analytics  v3.14.7 ❯ python3 analytics_pipeline.py</text>
+          
+          <text x="12" y="34" class="doc-mono" font-size="9.5" fill="#eceff4">Data Analytics &amp; Prediction Pipeline</text>
+          <text x="12" y="46" class="doc-mono" font-size="9.5" fill="#4c566a">------------------------------------</text>
+          <text x="10" y="62" class="doc-mono" font-size="8.5" fill="#a3be8c"> alexchen ⏱ 14ms ❯</text>
+        </g>
+      </g>
+
+      <!-- Block 2 Section: Code + Interactive Input + Output -->
+      <g transform="translate(0, 246)">
+        <text x="0" y="14" class="doc-font" font-size="13" font-weight="700" fill="#1e293b">
+          interactive parameter configuration &amp; summary
+        </text>
+        <line x1="0" y1="20" x2="510" y2="20" stroke="#e2e8f0" stroke-width="1" />
+
+        <!-- 1. Code Snippet Box (Include Code enabled) -->
+        <g transform="translate(0, 26)">
+          <rect width="510" height="62" rx="4" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1" />
+          <path d="M 0 0 L 28 0 L 28 62 L 0 62 Z" fill="#f1f5f9" />
+          <line x1="28" y1="0" x2="28" y2="62" stroke="#e2e8f0" stroke-width="1" />
+          
+          <!-- Line Numbers -->
+          <text x="14" y="17" class="doc-mono" font-size="9" fill="#94a3b8" text-anchor="middle">1</text>
+          <text x="14" y="32" class="doc-mono" font-size="9" fill="#94a3b8" text-anchor="middle">2</text>
+          <text x="14" y="47" class="doc-mono" font-size="9" fill="#94a3b8" text-anchor="middle">3</text>
+          
+          <!-- Code Lines -->
+          <text x="36" y="17" class="doc-mono" font-size="9.5" fill="#0f172a">dataset_path = input(<tspan fill="#10b981">"Enter dataset path: "</tspan>)</text>
+          <text x="36" y="32" class="doc-mono" font-size="9.5" fill="#0f172a">n_folds = int(input(<tspan fill="#10b981">"Enter cross-validation folds: "</tspan>))</text>
+          <text x="36" y="47" class="doc-mono" font-size="9.5" fill="#0f172a">model_choice = input(<tspan fill="#10b981">"Select classification model: "</tspan>)</text>
+        </g>
+
+        <!-- 2. Terminal Screenshot Card 2 -->
+        <g transform="translate(0, 94)">
+          <rect width="510" height="110" rx="4" fill="#000000" />
+          <rect width="510" height="16" fill="#181a1f" rx="4" />
+          <path d="M 0 8 L 0 16 L 510 16 L 510 8 Z" fill="#181a1f" />
+          <text x="10" y="12" class="doc-mono" font-size="8.5" fill="#88c0d0"> alexchen ~/projects/analytics  v3.14.7 ❯</text>
+
+          <text x="12" y="32" class="doc-mono" font-size="9.5" fill="#eceff4"><tspan fill="#38bdf8">Enter dataset path: </tspan><tspan fill="#a3be8c">data/customer_churn.csv</tspan></text>
+          <text x="12" y="47" class="doc-mono" font-size="9.5" fill="#eceff4"><tspan fill="#38bdf8">Enter cross-validation folds: </tspan><tspan fill="#a3be8c">5</tspan></text>
+          <text x="12" y="62" class="doc-mono" font-size="9.5" fill="#eceff4"><tspan fill="#38bdf8">Select classification model: </tspan><tspan fill="#a3be8c">2 (Gradient Boosting)</tspan></text>
+          <text x="12" y="77" class="doc-mono" font-size="9.5" fill="#eceff4">Accuracy: <tspan fill="#a3be8c">94.62%</tspan>  |  F1-Score: 0.938  |  ROC-AUC: 0.971</text>
+
+          <text x="10" y="99" class="doc-mono" font-size="8.5" fill="#a3be8c"> alexchen ⏱ 210ms ❯</text>
+        </g>
+      </g>
+
+      <!-- Block 3 Section: Code + Inline Plot -->
+      <g transform="translate(0, 485)">
+        <text x="0" y="14" class="doc-font" font-size="13" font-weight="700" fill="#1e293b">
+          feature importance distribution (plot)
+        </text>
+        <line x1="0" y1="20" x2="510" y2="20" stroke="#e2e8f0" stroke-width="1" />
+
+        <!-- Inline Plot Box -->
+        <g transform="translate(0, 26)">
+          <rect width="510" height="95" rx="4" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1" />
+          
+          <!-- Mini SVG Bar Chart -->
+          <g transform="translate(45, 75) scale(1, -1)">
+            <rect x="20" y="0" width="40" height="52" fill="#3b82f6" rx="2" />
+            <rect x="90" y="0" width="40" height="35" fill="#6366f1" rx="2" />
+            <rect x="160" y="0" width="40" height="64" fill="#10b981" rx="2" />
+            <rect x="230" y="0" width="40" height="26" fill="#f59e0b" rx="2" />
+            <rect x="300" y="0" width="40" height="18" fill="#ec4899" rx="2" />
+            <line x1="0" y1="0" x2="380" y2="0" stroke="#94a3b8" stroke-width="1.5" />
+          </g>
+
+          <text x="255" y="86" class="doc-font" font-size="9" fill="#64748b" text-anchor="middle">
+            Figure 1: Automated Matplotlib inline figure capture beneath block execution
+          </text>
+        </g>
+      </g>
+
+      <!-- Footer Page Number -->
+      <text x="255" y="650" class="doc-font" font-size="10" font-weight="500" fill="#94a3b8" text-anchor="middle">
+        Page 1 of 2
+      </text>
+    </g>
+  </g>
+</svg>
