@@ -138,10 +138,24 @@ When a script executes `input()`, PyBlockRunner seamlessly pauses the block and 
 
 ### Installation
 
+#### Method 1: Direct Install via pip (Recommended)
+You can install and run PyBlockRunner directly from GitHub without cloning:
+
 ```bash
-# 1. Clone or download the repository
-git clone https://github.com/<your-username>/python_block.git
-cd python_block
+# Core installation (CLI, GUI Studio, Starship cards, Word-doc style PDF)
+pip install git+https://github.com/raian-ruku/python_block_runner.git
+
+# With automated Matplotlib figure harvesting support
+pip install "pyblockrunner[plots] @ git+https://github.com/raian-ruku/python_block_runner.git"
+```
+
+#### Method 2: Clone for Local Development (Editable Mode)
+If you want to view, inspect, or modify the source code locally:
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/raian-ruku/python_block_runner.git
+cd python_block_runner
 
 # 2. Install in editable mode
 pip install -e .
@@ -150,10 +164,20 @@ pip install -e .
 pip install -e ".[plots]"
 ```
 
-Alternatively, install directly from GitHub without cloning:
-```bash
-pip install git+https://github.com/<your-username>/python_block.git
-```
+---
+
+### 🔄 Updating to the Latest Version
+
+When new updates are published, update your installation with a single command:
+
+* **For Direct pip Installs**:
+  ```bash
+  pip install --upgrade --force-reinstall git+https://github.com/raian-ruku/python_block_runner.git
+  ```
+* **For Local Git Clones**:
+  ```bash
+  git pull
+  ```
 
 ---
 
@@ -272,7 +296,7 @@ pyblockrunner [script.py] [options]
 PyBlockRunner is organized into decoupled, modular components:
 
 ```
-python_block/
+python_block_runner/
 ├── pyproject.toml               # Package metadata & entry points
 ├── requirements.txt             # Core dependencies
 ├── README.md                    # Documentation

@@ -19,6 +19,11 @@ plots = ["matplotlib"]
 [project.scripts]
 pyblockrunner = "pyblockrunner.cli:main"
 
+[project.urls]
+Homepage = "https://github.com/raian-ruku/python_block_runner"
+Repository = "https://github.com/raian-ruku/python_block_runner"
+"Bug Tracker" = "https://github.com/raian-ruku/python_block_runner/issues"
+
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["pyblockrunner*"]
