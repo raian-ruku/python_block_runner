@@ -287,7 +287,8 @@ def _analyze_statement(stmt: ast.AST) -> tuple[set[str], set[str], bool]:
                 defs.update(s_defs)
                 deps.update(s_deps)
 
-    deps.difference_update(defs)
+    if not isinstance(stmt, (ast.Assign, ast.AnnAssign, ast.AugAssign)):
+        deps.difference_update(defs)
     deps.difference_update(BUILTIN_NAMES)
 
     return defs, deps, is_star
@@ -331,25 +332,28 @@ def extract_definitions(full_source: str) -> list[Definition]:
 def _find_best_definition(
     symbol: str,
     all_definitions: list[Definition],
-    block_start_line: int,
+    before_lineno: int,
+    allow_fallback: bool = True,
 ) -> Optional[Definition]:
     candidates = [d for d in all_definitions if symbol in d.defines]
     if not candidates:
         star_candidates = [
             d for d in all_definitions
-            if d.is_star_import and d.lineno < block_start_line
+            if d.is_star_import and d.lineno < before_lineno
         ]
         if star_candidates:
             return star_candidates[-1]
         return None
 
-    # Prefer definition that occurs before block_start_line, closest to it
-    before = [d for d in candidates if d.lineno < block_start_line]
+    # Prefer definition that occurs before before_lineno, closest to it
+    before = [d for d in candidates if d.lineno < before_lineno]
     if before:
         return max(before, key=lambda d: d.lineno)
 
-    # Otherwise, first definition found
-    return candidates[0]
+    # Fallback to first definition found only when allowed (e.g. initial block queries)
+    if allow_fallback:
+        return candidates[0]
+    return None
 
 
 def _resolve_symbol_set(
@@ -360,15 +364,21 @@ def _resolve_symbol_set(
 ) -> list[Definition]:
     needed_definitions: list[Definition] = []
     seen_nodes: set[int] = set()
-    visited_symbols: set[str] = set(missing_symbols)
-    queue: list[str] = list(missing_symbols)
+    visited_queries: set[tuple[str, int]] = set()
+    queue: list[tuple[str, int, bool]] = [
+        (sym, block_start_line, True) for sym in missing_symbols
+    ]
 
     while queue:
-        sym = queue.pop(0)
-        if sym in current_ns or sym in BUILTIN_NAMES:
+        sym, before_line, allow_fallback = queue.pop(0)
+        if sym in BUILTIN_NAMES:
+            continue
+        if before_line == block_start_line and sym in current_ns:
             continue
 
-        defn = _find_best_definition(sym, all_definitions, block_start_line)
+        defn = _find_best_definition(
+            sym, all_definitions, before_line, allow_fallback=allow_fallback
+        )
         if defn is None:
             continue
 
@@ -378,13 +388,11 @@ def _resolve_symbol_set(
             needed_definitions.append(defn)
 
             for dep in defn.depends_on:
-                if (
-                    dep not in visited_symbols
-                    and dep not in current_ns
-                    and dep not in BUILTIN_NAMES
-                ):
-                    visited_symbols.add(dep)
-                    queue.append(dep)
+                query_key = (dep, defn.lineno)
+                if query_key not in visited_queries:
+                    visited_queries.add(query_key)
+                    # For dependencies required by defn at defn.lineno, look strictly before defn.lineno
+                    queue.append((dep, defn.lineno, False))
 
     return needed_definitions
 

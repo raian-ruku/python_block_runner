@@ -222,6 +222,17 @@ class Executor:
         if not self.isolated:
             # Shared namespace: pre-populate with builtins
             self._namespace = {"__builtins__": __builtins__}
+            # Execute top-level prelude (code before first block separator, e.g. imports and constants)
+            prelude = ""
+            for b in blocks:
+                if getattr(b, "prelude", ""):
+                    prelude = b.prelude
+                    break
+            if prelude:
+                try:
+                    exec(compile(prelude, "<prelude>", "exec"), self._namespace)
+                except Exception:
+                    pass
 
         for block in blocks:
             result = self._run_block(block)
@@ -248,6 +259,13 @@ class Executor:
         ns = {} if self.isolated else self._namespace
         if not ns.get("__builtins__"):
             ns["__builtins__"] = __builtins__
+        if self.isolated:
+            prelude = getattr(block, "prelude", "")
+            if prelude:
+                try:
+                    exec(compile(prelude, "<prelude>", "exec"), ns)
+                except Exception:
+                    pass
 
         # Capture streams
         captured_stdout = _StreamCapture(

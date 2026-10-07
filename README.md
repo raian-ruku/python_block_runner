@@ -74,7 +74,12 @@ Every developer's `starship.toml` configuration is unique—from the default min
 ---
 
 ### 3. Desktop GUI Studio
-A responsive desktop application built with Tkinter, featuring 5 stacked panels: Configuration & Metadata, Detected Blocks checklist, Execution Progress, Real-Time Console Output, and Latest Block Preview.
+A modern dark-themed IDE Studio application built with Tkinter, featuring:
+- **Context & Navigation Bar**: Real-time target script badge, Python/TkDND environment pills, and collapsible 4-column configuration panel.
+- **Action Control Bar**: Emerald Green `▶ Run Script (Ctrl+↵)`, Cyan `📄 Open PDF Report`, and live execution status indicators.
+- **Two-Column Split Workspace**:
+  * **Left Panel**: Rich block cards (with LOC, code snippets, skip toggles) and live color-coded process output log.
+  * **Right Panel**: High-resolution block screenshot preview with DPI/latency metrics and compiled PDF report artifact card.
 
 > [!TIP]
 > The **Name** and **ID / Roll No** fields are **strictly optional**. Leave them blank for clean personal documentation without author headers, or fill them in for formal course and lab submissions.
@@ -129,8 +134,9 @@ When a script executes `input()`, PyBlockRunner seamlessly pauses the block and 
 - **🛡️ Control Flow & Loop Protection**: Indented comments inside `while`, `for`, `if`, `def`, and `class` statements are never severed, preserving loop conditions and flow integrity. Includes a 5 MB buffer ceiling to safeguard against infinite print loops.
 - **📊 Matplotlib Figure Harvesting**: Hooks directly into `plt.show()` and inspects active figures, capturing and embedding high-resolution charts inline beneath their corresponding terminal output cards.
 - **📄 Word-Doc Style PDF Builder**: Clean single-line section headers, tight vertical packing on A4 pages, optional cover page, and optional code snippets.
+- **📝 Microsoft Word (.docx) Export**: Generates fully editable, beautifully formatted Word documents with native Heading styles, editable monospace code boxes, pitch-black editable terminal containers, and resizable high-res charts.
 - **🎨 Light & Dark Themes**: Supports both light and dark document styles, defaulting to a clean light aesthetic for formal submissions.
-- **🪶 Zero Heavy PDF Dependencies**: Powered by Pillow. No headless Chromium, Selenium, Weasyprint, or heavy C libraries required.
+- **🪶 Lightweight Architecture**: Powered by Pillow and python-docx. No headless Chromium, Selenium, Weasyprint, or heavy C libraries required.
 
 ---
 
@@ -217,15 +223,16 @@ PyBlockRunner uses an indentation-aware state machine to parse sections. Any top
 | Pattern Type | Syntax Example | Generated Title |
 |---|---|---|
 | **Jupyter Cell** | `# %% Data Cleaning` | `Data Cleaning` |
-| **Numbered Problem** | `# Problem 1: Array Manipulation` | `Problem 1: Array Manipulation` |
-| **Numbered Task** | `# task 2: validate user input` | `task 2: validate user input` |
-| **Question / Exercise** | `# Question 3: Matrix Multiplication` | `Question 3: Matrix Multiplication` |
+| **Numbered Part / Problem** | `# Part 1` / `# Problem 1: Basic Math` | `Part 1` / `Problem 1: Basic Math` |
+| **Numbered Task / Step** | `# Task 2: Validate Input` / `# Step 3` | `Task 2: Validate Input` / `Step 3` |
+| **Title-Cased Section** | `# Frequency Table` / `# Histogram` | `Frequency Table` / `Histogram` |
+| **Analysis / Chart Header** | `# Mean Without Outliers` / `# Bar Chart` | `Mean Without Outliers` / `Bar Chart` |
 | **Dashed Header** | `# --- Neural Network Setup ---` | `Neural Network Setup` |
 | **Equals Header** | `# === Summary of Results ===` | `Summary of Results` |
 | **Markdown Hashes** | `### Evaluation Metrics` | `Evaluation Metrics` |
 
 ### Skipping Blocks
-To exclude a block from execution and PDF generation, add `pyblock: skip` to its comment:
+To exclude a block from execution and PDF generation, add `pyblock: skip` to its comment (or the comment line immediately following):
 ```python
 # %% Problem 4: Scratchpad (pyblock: skip)
 # This block will not be executed or included in the PDF report
@@ -249,14 +256,17 @@ while retry_training:
 
 | Control | Description | Default |
 |---|---|---|
-| **Script Picker** | Browse and load your Python source file. Automatically triggers block parsing. | `None` |
+| **Universal Drag & Drop** | Drag and drop any Python source file (`.py`) anywhere into the window to load and parse immediately. | Enabled |
+| **Collapsible Sections** | Click `▼ / ▶` on **Configuration**, **Detected Blocks**, **Console Output**, or **Latest Block Preview** to collapse or expand sections. | All Expanded |
+| **Scrollable Blocks Checklist** | Large scripts with dozens of blocks are contained within a dedicated scrollable frame with **Select All** and **Deselect All** buttons. | All Checked |
+| **Master Window Scrolling** | Smooth trackpad / mousewheel scrolling across the entire interface guarantees preview cards and logs are always reachable. | Enabled |
+| **Large Output Handling** | Long terminal outputs (e.g., 80+ row frequency tables) automatically scale proportionally or paginate cleanly across PDF pages without clipping. | Automatic |
 | **Name & ID** | **Optional metadata fields** printed in report header and cover page. Can be left completely empty for clean personal reports. | Empty (Optional) |
 | **Theme** | Select between `light` (clean document) and `dark` (cyber aesthetic). | `light` |
 | **State** | `Shared` (cumulative variables across blocks) or `Isolated` (fresh namespace). | `Shared` |
 | **Include Code** | Toggle whether raw Python source code boxes precede terminal screenshots. | `Unchecked` |
 | **Cover Page** | Toggle inclusion of a dedicated title / cover page. | `Unchecked` |
 | **Timeout (s)** | Maximum seconds per block before non-fatal timeout cancellation. | `30s` |
-| **Detected Blocks** | Checkbox list of all discovered blocks. Uncheck any block to skip execution. | All Checked |
 | **Font Chooser** | Interactively browse and preview installed system fonts for headings. | `Iosevka NF` |
 
 ---
@@ -280,11 +290,13 @@ pyblockrunner [script.py] [options]
 | `--no-code` | *None* | Explicitly omit code snippets. | Default |
 | `--cover` | *None* | Include a dedicated cover page. | Off |
 | `--no-cover` | *None* | Omit cover page. | Default |
+| `--docx` | *None* | Generate an editable Microsoft Word (.docx) document alongside PDF. | Off |
+| `--output-docx` | `PATH` | Custom path for the output Word (.docx) document. | `<script>_output.docx` |
 | `--output`, `-o` | `PATH` | Custom path for the output PDF. | `<script>_output.pdf` |
-| `--output-dir` | `DIR` | Destination directory for generated PDF. | Script Directory |
+| `--output-dir` | `DIR` | Destination directory for generated PDF / DOCX. | Script Directory |
 | `--isolated` | *None* | Run each block in an isolated namespace. | Shared |
 | `--timeout` | `SECONDS` | Timeout ceiling per block (0 = no limit). | `30` |
-| `--open` | *None* | Automatically open PDF in default viewer when finished. | Off |
+| `--open` | *None* | Automatically open document in default viewer when finished. | Off |
 | `--font` | `NAME_OR_PATH` | Monospace font name or TTF/OTF path. | `Iosevka NF` |
 | `--separator` | `REGEX` | Custom regex pattern for block detection. | Auto-detect |
 | `--version`, `-v` | *None* | Print PyBlockRunner version and exit. | — |
@@ -321,6 +333,7 @@ python_block_runner/
     ├── renderer.py              # Pillow card renderer (code, cards, cover)
     ├── starship.py              # Starship powerline prompt emulator
     ├── pdf_builder.py           # Word-doc style PDF page assembly
+    ├── docx_builder.py          # Editable Microsoft Word (.docx) document builder
     ├── gui.py                   # Native Tkinter desktop studio
     └── cli.py                   # Command-line interface & argument parser
 ```
@@ -347,13 +360,16 @@ python_block_runner/
   │  renderer.py   │ ──► Renders pixel-perfect terminal cards (Iosevka NF)
   └───────┬────────┘
           ▼
-  ┌────────────────┐
-  │ pdf_builder.py │ ──► Packs cards, plots & single headers into Word-style A4 PDF
-  └───────┬────────┘
-          ▼
-  ┌────────────────┐
-  │ Output Report  │ (e.g. script_output.pdf)
-  └────────────────┘
+  ┌────────────────┴───────────────┐
+  ▼                                ▼
+┌────────────────┐               ┌─────────────────┐
+│ pdf_builder.py │               │ docx_builder.py │
+└───────┬────────┘               └────────┬────────┘
+        ▼                                 ▼
+┌────────────────┐               ┌─────────────────┐
+│ Output PDF Doc │               │ Output Word Doc │
+│ (*_output.pdf) │               │ (*_output.docx) │
+└────────────────┘               └─────────────────┘
 ```
 
 ---
@@ -362,6 +378,8 @@ python_block_runner/
 
 - **Python**: `>= 3.8`
 - **Pillow**: `>= 9.0` (Core image synthesis & PDF compilation)
+- **python-docx**: `>= 1.1.0` (Microsoft Word .docx document builder)
+- **tkinterdnd2**: `>= 0.3.0` (Drag-and-drop file loading in GUI)
 - **Tkinter**: Standard Python built-in library (Desktop GUI)
 - **matplotlib** *(Optional)*: Auto-detected for figure capture
 

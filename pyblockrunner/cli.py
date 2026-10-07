@@ -114,6 +114,31 @@ def _run_headless(args: argparse.Namespace) -> int:
     )
     print(f"[pyblockrunner] Done ✓  PDF saved to: {out_path}")
 
+    docx_requested = getattr(args, "docx", False) or bool(getattr(args, "output_docx", None))
+    if docx_requested:
+        from .docx_builder import build_docx, is_docx_available
+        if not is_docx_available():
+            print("[pyblockrunner] Warning: python-docx is not installed, skipping DOCX generation.", file=sys.stderr)
+        else:
+            if getattr(args, "output_docx", None):
+                docx_out = Path(args.output_docx)
+            else:
+                docx_out = out_path.with_suffix(".docx")
+            print(f"[pyblockrunner] Building Word Doc (.docx) → {docx_out}")
+            build_docx(
+                results=results,
+                output_path=docx_out,
+                script_path=script,
+                script_name=script.name,
+                theme=args.theme,
+                show_code=getattr(args, "code", False) and not getattr(args, "no_code", False),
+                author_name=args.name or None,
+                author_id=args.id or None,
+                no_cover=getattr(args, "no_cover", False) or not getattr(args, "cover", False),
+                font_path=font_path,
+            )
+            print(f"[pyblockrunner] Done ✓  Word document saved to: {docx_out}")
+
     if args.open:
         _open_pdf(out_path)
 
@@ -183,6 +208,10 @@ def build_parser() -> argparse.ArgumentParser:
                    help="Include a cover/title page in the output PDF.")
     p.add_argument("--no-cover", action="store_true",
                    help="Skip the cover/title page in the output PDF.")
+    p.add_argument("--docx", action="store_true",
+                   help="Generate an editable Microsoft Word (.docx) document alongside the PDF.")
+    p.add_argument("--output-docx", metavar="PATH",
+                   help="Full path for the output Microsoft Word (.docx) document.")
     p.add_argument("--font", metavar="NAME_OR_PATH",
                    help=(
                        "Font name or TTF/OTF path for terminal output & code boxes. "

@@ -230,7 +230,7 @@ def render_terminal_output(
     stdout: str,
     stderr: str,
     width_px: int = 1000,
-    max_lines: int = 120,
+    max_lines: int = 350,
     font_size: int = 20,
     font_path: Optional[str] = None,
     show_prompt: bool = True,
@@ -554,14 +554,12 @@ def render_cover_page(
     # 5. Section 1: STUDENT NAME
     display_name = (author_name or "").strip() or "—"
     t_label1 = "S T U D E N T   N A M E"
-    lw1, lh1 = _measure(draw, t_label1, label_font)
-    nw, nh = _measure(draw, display_name, name_font)
 
     y_label1 = card_y0 + 138
-    draw.text(((W - lw1) // 2, y_label1), t_label1, font=label_font, fill=label_fg)
+    draw.text((cx, y_label1), t_label1, font=label_font, fill=label_fg, anchor="mt")
 
     y_name = card_y0 + 178
-    draw.text(((W - nw) // 2, y_name), display_name, font=name_font, fill=name_fg)
+    draw.text((cx, y_name), display_name, font=name_font, fill=name_fg, anchor="mt")
 
     # 6. Center Symmetrical Ornamental Divider
     div_y = card_y0 + 288
@@ -575,23 +573,25 @@ def render_cover_page(
     # 7. Section 2: STUDENT ID
     display_id = (author_id or "").strip() or "—"
     t_label2 = "S T U D E N T   I D"
-    lw2, lh2 = _measure(draw, t_label2, label_font)
-    iw, ih = _measure(draw, display_id, id_font)
 
     y_label2 = card_y0 + 348
-    draw.text(((W - lw2) // 2, y_label2), t_label2, font=label_font, fill=label_fg)
+    draw.text((cx, y_label2), t_label2, font=label_font, fill=label_fg, anchor="mt")
 
     # Credential pill badge
     badge_pad_x = 48
+    bbox_id = draw.textbbox((0, 0), display_id, font=id_font)
+    iw = bbox_id[2] - bbox_id[0]
     badge_w = max(340, min(iw + badge_pad_x * 2, card_w - 160))
     badge_h = 66
     badge_x0 = (W - badge_w) // 2
     badge_x1 = badge_x0 + badge_w
     badge_y0 = card_y0 + 396
     badge_y1 = badge_y0 + badge_h
+    badge_cx = (badge_x0 + badge_x1) // 2
+    badge_cy = (badge_y0 + badge_y1) // 2
 
     draw.rounded_rectangle([(badge_x0, badge_y0), (badge_x1, badge_y1)], radius=14, fill=id_badge_bg, outline=accent, width=2)
-    draw.text(((W - iw) // 2, badge_y0 + (badge_h - ih) // 2), display_id, font=id_font, fill=id_badge_fg)
+    draw.text((badge_cx, badge_cy), display_id, font=id_font, fill=id_badge_fg, anchor="mm")
 
     # 8. Bottom Card Decorative Line
     bot_card_y = card_y0 + 540

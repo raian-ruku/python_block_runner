@@ -64,11 +64,55 @@ class _PageCanvas:
     def advance(self, px: int) -> None:
         self.y += px
 
-    def paste(self, img: Image.Image, gap_after: int = ELEMENT_GAP) -> None:
-        """Paste *img* left-aligned at current Y within content margins."""
-        x = MARGIN_X
+    def paste(self, img: Image.Image, gap_after: int = ELEMENT_GAP, center: bool = False) -> None:
+        """Paste *img* left-aligned or centered at current Y within content margins."""
+        if center and img.width < CONTENT_W:
+            x = MARGIN_X + (CONTENT_W - img.width) // 2
+        else:
+            x = MARGIN_X
         self.img.paste(img, (x, self.y))
         self.y += img.height + gap_after
+
+
+# ---------------------------------------------------------------------------
+# Heading wrapping helper
+# ---------------------------------------------------------------------------
+
+def _wrap_heading_text(draw: ImageDraw.ImageDraw, text: str, font, max_width: int) -> list[str]:
+    """Wrap heading text cleanly into lines so that no characters or words are truncated."""
+    clean_text = text.strip()
+    if not clean_text:
+        return []
+    lines: list[str] = []
+    for paragraph in clean_text.splitlines():
+        words = paragraph.split()
+        if not words:
+            continue
+        cur_line = ""
+        for w in words:
+            cand = f"{cur_line} {w}" if cur_line else w
+            cw, _ = _measure(draw, cand, font)
+            if cw <= max_width:
+                cur_line = cand
+            else:
+                if cur_line:
+                    lines.append(cur_line)
+                ww, _ = _measure(draw, w, font)
+                if ww > max_width:
+                    chunk = ""
+                    for ch in w:
+                        if _measure(draw, chunk + ch, font)[0] <= max_width:
+                            chunk += ch
+                        else:
+                            if chunk:
+                                lines.append(chunk)
+                            chunk = ch
+                    cur_line = chunk
+                else:
+                    cur_line = w
+        if cur_line:
+            lines.append(cur_line)
+    return lines or [clean_text]
 
 
 # ---------------------------------------------------------------------------
@@ -107,6 +151,8 @@ class _PDFBuilder:
 
         self.pages: list[Image.Image] = []
         self._current: _PageCanvas = _PageCanvas(self.bg, page_num=1)
+        self._pending_headers: list[str] = []
+        self._page_has_visual_content: bool = False
 
     # ── page management ────────────────────────────────────────────────
 
@@ -124,27 +170,40 @@ class _PDFBuilder:
     def _new_page(self) -> None:
         self._finish_page()
         self._current = _PageCanvas(self.bg, page_num=len(self.pages) + 1)
+        self._page_has_visual_content = False
 
     # ── heading ────────────────────────────────────────────────────────
 
-    def _draw_heading(self, title: str) -> None:
+    def _measure_heading_height(self, title: str, is_section: bool = False) -> int:
+        lines = _wrap_heading_text(self._current.draw, title, self.heading_font, CONTENT_W - 4)
+        if not lines:
+            return HEADING_H
+        total_h = 0
+        for line in lines:
+            _, th = _measure(self._current.draw, line, self.heading_font)
+            total_h += th + 6
+        total_h += 6 + (14 if is_section else 10)
+        return max(HEADING_H, total_h)
+
+    def _draw_heading(self, title: str, is_section: bool = False) -> None:
         draw = self._current.draw
         font = self.heading_font
-
-        # Truncate if wider than content
-        display = title
-        tw, th  = _measure(draw, display, font)
-        while tw > CONTENT_W - 4 and len(display) > 10:
-            display = display[:-4] + "…"
-            tw, th  = _measure(draw, display, font)
+        lines = _wrap_heading_text(draw, title, font, CONTENT_W - 4)
+        if not lines:
+            lines = [title]
 
         y = self._current.y
-        draw.text((MARGIN_X, y), display, font=font, fill=self.heading_fg)
-        y += th + 6
+        for line in lines:
+            tw, th = _measure(draw, line, font)
+            draw.text((MARGIN_X, y), line, font=font, fill=self.heading_fg)
+            y += th + 6
+
+        y += 2
         # Blue accent underline (Word H2 style)
+        line_w = 3 if is_section else 2
         draw.line([(MARGIN_X, y), (MARGIN_X + CONTENT_W, y)],
-                  fill=self.rule_col, width=2)
-        self._current.y = y + 10
+                  fill=self.rule_col, width=line_w)
+        self._current.y = y + (14 if is_section else 10)
 
     # ── image helpers ──────────────────────────────────────────────────
 
@@ -153,6 +212,64 @@ class _PDFBuilder:
             return img
         ratio = CONTENT_W / img.width
         return img.resize((CONTENT_W, int(img.height * ratio)), Image.LANCZOS)
+
+    def _paste_element(self, img: Image.Image, gap_after: int = ELEMENT_GAP) -> None:
+        """
+        Paste *img* into the document cleanly:
+        - If img fits on current page: paste directly.
+        - If img fits on a full single page, but doesn't fit on current page and current page already
+          has visual content, move to a new page.
+        - If img exceeds the full page height:
+          * If moderately oversized (<= 1.35x remaining space): scale aspect ratio proportionally to fit.
+          * If significantly oversized (> 1.35x remaining space): split into multiple page images.
+        """
+        max_page_h = A4_H - 2 * MARGIN_Y
+        rem = self._current.remaining()
+
+        # If it fits on current page: paste directly
+        if img.height <= rem:
+            self._current.paste(img, gap_after=gap_after)
+            self._page_has_visual_content = True
+            return
+
+        # If it fits on a full single page, but doesn't fit in remaining space:
+        # Move to a new page only if the current page already has prior visual content
+        if img.height <= max_page_h and self._page_has_visual_content and self._current.y > MARGIN_Y + HEADING_H + 20:
+            self._new_page()
+            rem = self._current.remaining()
+            if img.height <= rem:
+                self._current.paste(img, gap_after=gap_after)
+                self._page_has_visual_content = True
+                return
+
+        # Case 1: Moderately tall (<= 1.35x remaining space) -> scale aspect ratio proportionally to fit
+        if img.height <= rem * 1.35 and rem >= 400:
+            scale = rem / img.height
+            new_w = max(100, int(img.width * scale))
+            new_h = int(img.height * scale)
+            scaled = img.resize((new_w, new_h), Image.LANCZOS)
+            self._current.paste(scaled, gap_after=gap_after, center=True)
+            self._page_has_visual_content = True
+            return
+
+        # Case 2: Significantly tall -> split across multiple pages as multiple images
+        y_offset = 0
+        total_h = img.height
+        while y_offset < total_h:
+            curr_rem = self._current.remaining()
+            # If remaining space is too small to fit a meaningful slice, move to new page
+            if curr_rem < 300:
+                self._new_page()
+                curr_rem = self._current.remaining()
+
+            slice_h = min(curr_rem, total_h - y_offset)
+            chunk = img.crop((0, y_offset, img.width, y_offset + slice_h))
+            is_last = (y_offset + slice_h >= total_h)
+            self._current.paste(chunk, gap_after=gap_after if is_last else 0)
+            self._page_has_visual_content = True
+            y_offset += slice_h
+            if not is_last:
+                self._new_page()
 
     # ── block renderer ─────────────────────────────────────────────────
 
@@ -164,6 +281,9 @@ class _PDFBuilder:
         fig_imgs: list[Image.Image] = []
 
         if result.skipped:
+            if not result.code.strip():
+                # A header/prelude block that was skipped has no code and needs no skip box
+                return
             skip_img = self._fit_to_width(render_terminal_output(
                 stdout="", stderr="[Block skipped via # pyblock: skip]",
                 width_px=CONTENT_W,
@@ -195,40 +315,47 @@ class _PDFBuilder:
             for fig in result.figures:
                 fig_imgs.append(self._fit_to_width(fig))
 
-        # Determine the first visual element to avoid orphan headings
-        first_el = code_img or term_img or (fig_imgs[0] if fig_imgs else skip_img)
-        if first_el is not None:
-            max_single_page_h = A4_H - 2 * MARGIN_Y - HEADING_H - ELEMENT_GAP
-            needed_h = HEADING_H + min(first_el.height, max_single_page_h) + ELEMENT_GAP
-        else:
-            needed_h = HEADING_H + MIN_CONTENT_H
+        # Check if this block has any visual output elements
+        has_visual = (code_img is not None) or (term_img is not None) or (skip_img is not None) or bool(fig_imgs)
 
-        if not self._current.fits(needed_h) and self._current.y > MARGIN_Y:
+        if not has_visual:
+            # Block has no visual output (pure section header, or code not shown with no output)
+            # Defer drawing until the first visual content arrives to prevent orphan blank pages
+            self._pending_headers.append(result.title)
+            return
+
+        first_el = code_img or term_img or (fig_imgs[0] if fig_imgs else skip_img)
+        min_content_needed = min(first_el.height, 220)
+        pending_h = sum(self._measure_heading_height(p_title, is_section=True) for p_title in self._pending_headers)
+        block_heading_h = self._measure_heading_height(result.title, is_section=False)
+        needed_h = pending_h + block_heading_h + min_content_needed + ELEMENT_GAP
+
+        # If current page already has visual content and cannot fit headings + initial chunk, move to fresh page
+        if self._page_has_visual_content and not self._current.fits(needed_h):
             self._new_page()
 
-        # Heading: drawn ONCE only
-        self._draw_heading(result.title)
+        # Draw pending section headers (e.g. "Part 1")
+        for p_title in self._pending_headers:
+            self._draw_heading(p_title, is_section=True)
+        self._pending_headers.clear()
+
+        # Draw current block heading
+        self._draw_heading(result.title, is_section=False)
 
         # Code box
         if code_img is not None:
-            if not self._current.fits(code_img.height + ELEMENT_GAP):
-                self._new_page()
-            self._current.paste(code_img, gap_after=ELEMENT_GAP)
+            self._paste_element(code_img, gap_after=ELEMENT_GAP)
 
         # Terminal output (if any)
         if term_img is not None:
-            if not self._current.fits(term_img.height + ELEMENT_GAP):
-                self._new_page()
-            self._current.paste(term_img, gap_after=ELEMENT_GAP)
+            self._paste_element(term_img, gap_after=ELEMENT_GAP)
 
         if skip_img is not None:
-            self._current.paste(skip_img, gap_after=ELEMENT_GAP)
+            self._paste_element(skip_img, gap_after=ELEMENT_GAP)
 
         # Plots
         for fig_img in fig_imgs:
-            if not self._current.fits(fig_img.height + ELEMENT_GAP):
-                self._new_page()
-            self._current.paste(fig_img, gap_after=ELEMENT_GAP)
+            self._paste_element(fig_img, gap_after=ELEMENT_GAP)
 
         # Inter-block breathing room
         self._current.advance(BLOCK_GAP - ELEMENT_GAP)
@@ -257,8 +384,15 @@ class _PDFBuilder:
 
         # Content pages
         self._current = _PageCanvas(self.bg, page_num=len(self.pages) + 1)
+        self._page_has_visual_content = False
         for result in results:
             self._add_block(result)
+
+        # Flush any trailing pending headers (e.g. if the last block had no output)
+        if self._pending_headers:
+            for p_title in self._pending_headers:
+                self._draw_heading(p_title, is_section=True)
+            self._pending_headers.clear()
 
         # Final page: combined terminal screenshot (only when there are multiple blocks with output)
         blocks_with_output = [
@@ -294,7 +428,7 @@ class _PDFBuilder:
                     duration_ms=total_ms,
                 )
                 combined_term = self._fit_to_width(combined_term)
-                self._current.paste(combined_term, gap_after=ELEMENT_GAP)
+                self._paste_element(combined_term, gap_after=ELEMENT_GAP)
 
         # Flush last page
         if self._current.y > MARGIN_Y:

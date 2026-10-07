@@ -43,6 +43,7 @@ class Block:
     raw_comment: str = ""       # Original comment text (for debugging)
     skip: bool = False          # True if "pyblock: skip" annotation found
     full_source: str = ""       # Full script source for external reference resolution
+    prelude: str = ""           # Script prelude (imports/setup before first block)
 
 
 # ---------------------------------------------------------------------------
@@ -58,9 +59,9 @@ _SEPARATOR_PATTERNS: list[tuple[str, str, bool]] = [
     (r"^#\s*[-=]{3,}\s*(.*?)\s*[-=]*\s*$", "dashes", True),
     # Markdown-style hashes (in comments):  ### Title
     (r"^#{2,}\s+(.*)", "hashes", True),
-    # Labeled sections (any label + number/letter + colon):
-    # Problem 1:  Task A:  Question 2:  Step 3:  Part B:  Section 1:
-    (r"^#\s*(?:Problem|Task|Question|Step|Part|Section|Exercise|Lab|Assignment|Example|Case|Block)\s*[\w\d]*\s*:?\s*(.*)",
+    # Labeled sections (any label + number/letter + optional subtitle):
+    # Problem 1:  Task A:  Question 2:  Step 3:  Part B:  Section 1:  Part 1
+    (r"^#\s*((?:Problem|Task|Question|Step|Part|Section|Exercise|Lab|Assignment|Example|Case|Block)\s*[\w\d.]*)(?:[:\-–—\s]\s*(.*))?$",
      "labeled", True),
     # Generic bare separators: a top-level comment line that is ALL CAPS (NO ignore case)
     (r"^#\s*([A-Z0-9\s:,.()\-]{4,})\s*$", "caps_title", False),
@@ -79,6 +80,52 @@ _NOISE_PATTERN = re.compile(
 
 # pyblock skip annotation
 _SKIP_PATTERN = re.compile(r"pyblock\s*:\s*skip", re.IGNORECASE)
+
+_NON_TITLE_PREFIXES = (
+    "todo", "fixme", "note", "bug", "warning", "tip", "caution", "hack", "xxx",
+    "url", "http", "https", "see", "author", "copyright", "license",
+    "import ", "from ", "def ", "class ", "return ", "if ", "else", "elif ",
+    "try:", "except", "finally", "with ", "for ", "while "
+)
+
+_MINOR_WORDS = {
+    "a", "an", "the", "and", "but", "or", "for", "nor", "on", "at", "to",
+    "from", "by", "with", "without", "in", "of", "vs", "via"
+}
+
+
+def _is_title_comment(line: str) -> bool:
+    """Return True if *line* looks like a section or problem title comment."""
+    if line.startswith((" ", "\t")):
+        return False
+    stripped = line.strip()
+    if not stripped.startswith("#"):
+        return False
+    if _NOISE_PATTERN.match(stripped):
+        return False
+    text = stripped.lstrip("#").strip()
+    if len(text) < 2 or len(text) > 300:
+        return False
+    # Exclude complete sentences ending in terminal punctuation
+    if text.endswith((".", "!", "?", ";", ",")):
+        return False
+    lower = text.lower()
+    if any(lower.startswith(p) for p in _NON_TITLE_PREFIXES):
+        return False
+    letters = [c for c in text if c.isalpha()]
+    if not letters or not letters[0].isupper():
+        return False
+    words = [w for w in re.findall(r"[A-Za-z0-9_\-]+", text) if any(c.isalpha() for c in w)]
+    if not words:
+        return False
+    if len(words) == 1:
+        return words[0][0].isupper()
+    cap_count = sum(1 for w in words if w[0].isupper())
+    non_minor = [w for w in words[1:] if w.lower() not in _MINOR_WORDS]
+    if not non_minor:
+        return words[0][0].isupper()
+    non_minor_caps = sum(1 for w in non_minor if w[0].isupper())
+    return (non_minor_caps == len(non_minor)) or (cap_count / len(words) >= 0.7)
 
 
 # ---------------------------------------------------------------------------
@@ -147,12 +194,18 @@ def _match_any(line: str) -> Optional[str]:
     for pattern, kind, ic in _COMPILED:
         m = pattern.match(stripped)
         if m:
+            if kind == "labeled":
+                label = m.group(1).strip()
+                desc = (m.group(2) or "").strip().lstrip(":-–— ").strip()
+                return f"{label}: {desc}" if desc else label
             title = m.group(1).strip() if m.lastindex else stripped.lstrip("#").strip()
             if kind == "caps_title":
                 letters = [c for c in title if c.isalpha()]
                 if not letters or not all(c.isupper() for c in letters):
                     continue
             return title
+    if _is_title_comment(stripped):
+        return stripped.lstrip("#").strip()
     return None
 
 
@@ -191,7 +244,7 @@ def _clean_title(raw: str) -> str:
     t = raw.strip().rstrip("-=").strip()
     # Remove repeated hashes at the start (from ### style)
     t = t.lstrip("#").strip()
-    return t if t else "Untitled Block"
+    return t
 
 
 def _split_into_blocks(lines: list[str], matcher, full_source: str = "") -> list[Block]:
@@ -205,6 +258,7 @@ def _split_into_blocks(lines: list[str], matcher, full_source: str = "") -> list
     pending: list[dict] = []
     current_block: Optional[dict] = None
     prelude_lines: list[str] = []
+    prelude_str: str = ""
     seen_first_separator = False
 
     i = 0
@@ -238,19 +292,24 @@ def _split_into_blocks(lines: list[str], matcher, full_source: str = "") -> list
                 if current_block is not None:
                     pending.append(current_block)
 
-                skip = bool(_SKIP_PATTERN.search(line))
-                initial_lines = []
-                # Prepend any prelude code (imports/setup before first block) into first block
+                skip = bool(_SKIP_PATTERN.search(line)) or (
+                    i + 1 < len(lines) and bool(_SKIP_PATTERN.search(lines[i + 1]))
+                )
+                code_start_idx = i + 1
+                # Save prelude code (imports/setup before first block) separately
                 if not seen_first_separator and prelude_lines:
-                    initial_lines = list(prelude_lines)
+                    prelude_str = "\n".join(prelude_lines).strip()
                     prelude_lines.clear()
 
                 seen_first_separator = True
+                clean_t = _clean_title(title)
+
                 current_block = {
-                    "title": _clean_title(title),
+                    "title": clean_t,
                     "raw_comment": line.strip(),
-                    "code_start": i + 1,
-                    "code_lines": initial_lines,
+                    "comment_line": i + 1,
+                    "code_start": code_start_idx,
+                    "code_lines": [],
                     "skip": skip,
                 }
             else:
@@ -280,29 +339,36 @@ def _split_into_blocks(lines: list[str], matcher, full_source: str = "") -> list
             pending.append({
                 "title": "Script Output",
                 "raw_comment": "",
+                "comment_line": 1,
                 "code_start": 0,
                 "code_lines": prelude_lines,
                 "skip": False,
             })
 
-    # Convert to Block dataclasses, drop empty blocks
+    # Convert to Block dataclasses, drop empty blocks unless they have a distinct title
     blocks: list[Block] = []
     idx = 1
     for p in pending:
         code = "\n".join(p["code_lines"]).strip()
-        if not code:
+        if not code and (not p["title"] or p["title"] == "Untitled Block"):
             continue
-        start = p["code_start"] + 1
-        end = start + len(p["code_lines"]) - 1
+        if p["code_lines"]:
+            start = p["code_start"] + 1
+            end = max(start, start + len(p["code_lines"]) - 1)
+        else:
+            start = p.get("comment_line", p["code_start"] + 1)
+            end = start
+        block_title = p["title"] if p["title"] and p["title"] != "Untitled Block" else f"Block {idx}"
         blocks.append(Block(
             index=idx,
-            title=p["title"],
+            title=block_title,
             code=code,
             start_line=start,
             end_line=end,
             raw_comment=p["raw_comment"],
             skip=p["skip"],
             full_source=full_source,
+            prelude=prelude_str,
         ))
         idx += 1
 
